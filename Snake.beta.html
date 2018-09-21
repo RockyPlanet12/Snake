@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+
+<html>
+
+    <head>
+        
+        <title>Snake</title>
+        
+        <style>
+canvas {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+} 
+            
+#trophy {
+    position: fixed;
+    top: 35%;
+    left: 45.5%;
+    transform: translate(-50%, -50%);
+}
+            
+#highScore {
+    position: fixed;
+    top: 35%;
+    left: 47.5%;
+    transform: translate(-50%, -50%);
+}
+            
+#apple {
+    position: fixed;
+    top: 35%;
+    left: 52.5%;
+    transform: translate(-50%, -50%);
+}
+            
+#points {
+    position: fixed;
+    top: 35%;
+    left: 54.5%;
+    transform: translate(-50%, -50%);
+}
+            
+h1 {
+    position: fixed;
+    top: 22.5%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+</style>
+        
+    </head>
+    
+    <body>
+        
+        
+        
+        <h1>Snake</h1>
+        
+        <BR>
+            
+            
+        <l id="points"></l><br>
+        <l id="highScore"></l>
+            
+        <br><br>
+            
+            
+        <canvas id="myCanvas" width="200" height="200" style="border:2px solid #000000;">lol</canvas>
+        <img id="trophy" src="https://st3.depositphotos.com/3636123/16888/v/450/depositphotos_168880790-stock-illustration-isolated-pixeled-trophy.jpg" alt="Trulli1" width="32" height="32">
+            
+        <img id="apple" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAyVBMVEX/////AAAAAACaYzdWyy30AAB0dHSGhobCAAC0AAAwMDBLS0udZTjoAABtRidhYWGcXjdSwit7nDJTzi1BmiIhTRFkQCT/paX/6Oh1SyqWlpbcAACGAAC0tLRbOiDc3Nzo6OgtHRBRNB2TXzX/wsL/YWH/dHT/tLQ8T08YMzNmAAAkJCS6JyeCi4s9PT2EhIRXZmaUnJzQAAD/S0uKhYv/WFj/ubn/lpY8mxdHmCwjDgAvJTFzRiB/AAA0IhN2ljB6i3YUSABpWCcw3S9tAAAClElEQVR4nO3d21bTUBCAYSy2haa1yElpUA4itLRQjgoqKL7/Q3nFyp6L7LXdq8nMTv//tklnvuQyayUrKxXUbbl9qmKEcgjTD2H6IUw/hOmHMP0Qpl8ThR1h2uuvFvU/t0LrajM8IUSIUD+ECBHqhxAhQv18wuNg4Z02w5NHuPrFbeP3+/Ief/aKpnNtlMgnFG1sbr0ta2tb/EtHGyVCiBChfggRItQPIUL7wqHY7Vdf1AjhoWj+48hJ3NFkhTL57OkdQoQGQ4gQoX4IESLUb9mF5T2I84baDE8eYf/vTmkvfw7cDrUZnnzC3VZ5lp+uyRAitB9ChPZDiNB+CBGq7d0J7TJSeBk8oZprkXl28xUuDC9DiBAhQoQIESJEuLTCcbTQbTHC8YJMo3m36GK2Ftq52Ob52O3Zs/d58ITZhbPZfBQtnIr5gzeh7Ufemf3gCQNx3jRa2EtE2EOIECFChAgRIlxq4SRS+BQpfIoUTv7DNHK7nq27tYPn36zHdRM8oS3Om12Lvb1CeU3DTbq15doIERoMIUL7IURoP4QI7Zeq8PZDed/FkakKTz17fhRHIkSoFcIihAi1QliEEKFWCItSFd5/O3M6aaBQdt944VeECBGqhxAhQv0QIkSo3+2J25n4rRlCXwgR2g8hQvshRGg/hAjthxCh/RAitB9ChPZDiNB+CBHaDyFC+yFEaD+ECO2HEKH9ELplbuN84KbtEInN8rHY2yuUxb7rq/ri3/Uli31fW/Vpv5Gu+hAiRKgfQoQI9UOI8LWs5zTJ2261o8T0fOKutqgvlshvlOQ1A3MxfVHfKJFlhoR1fEkHIUKECBEiRIgQIUIdoeyqVW9XNZhkw5qFQ4QIESJEiBAhQoQIUxb+AxTECVyLcvMNAAAAAElFTkSuQmCC" alt="Trulli2" width="30" height="30">
+        
+            
+        <script>
+            
+            var c = document.getElementById("myCanvas");
+                
+            var ctx = c.getContext("2d");
+            
+            var snake = ["head", "body-1", "body-2", "body-3", "body-5"]
+            
+            var posX = [0, 10, 20, 30, 40]
+            
+            var posY = [0, 0, 0, 0, 0]
+
+            var point;
+            
+            var pointX = 10//Math.round(Math.random() * 20) * 10
+            
+            var pointY = 10//Math.round(Math.random() * 20) * 10
+            
+            var points = 0
+            
+            var directionX = 10
+            
+            var directionY = 0
+            
+            var velO = 100
+            
+            var interval = setInterval(snakeSpawn, velO)
+            
+            var x = 1.1
+            
+            var highScore = 0
+            
+            document.addEventListener ('keydown', function (event) {
+                            
+                if (event.keyCode == 37 && directionX == 0) {
+                       
+                    directionX = -10
+                    directionY = 0
+                    
+                    snakeSpawn ()
+ 
+                }
+                            
+                if (event.keyCode == 38 && directionY == 0) {
+                         
+                    directionX = 0
+                    directionY = -10
+                
+                    snakeSpawn ()
+   
+                }
+                
+                if (event.keyCode == 39 && directionX == 0) {
+                            
+                    directionX = 10
+                    directionY = 0
+                    
+                    snakeSpawn ()
+  
+                }
+                
+                if (event.keyCode == 40 && directionY == 0) {
+                        
+                    directionX = 0
+                    directionY = 10
+                    
+                    snakeSpawn ()
+
+                }
+                
+            })
+            
+            
+            function start () {
+                    
+                
+                
+                //collisionDetection () 
+                
+                //pointGrab ()
+                  
+            }
+            
+            function snakeSpawn () {
+                
+                ctx.clearRect (0, 0, c.width, c.height)
+                
+                pointSpawn ()
+                
+                ctx.beginPath();  
+                   
+                posX.push (posX [posX.length - 1] + directionX)
+                posY.push (posY [posY.length - 1] + directionY)
+                
+                
+                if (posX [posX.length - 1] > c.width - 10) {
+                    
+                    //ctx.clearRect(posX[posX.length - 1], posY[posY.length - 1], 10, 10)
+                    
+                    //posX.splice(0, 1);
+                    //posX.push (0)
+                    posX [posX.length - 1] = 0;
+                }
+                
+                if (posY [posY.length - 1] > c.height - 10) {
+                    
+                    //ctx.clearRect(posX[posX.length - 1], posY[posY.length - 1], 10, 10)
+                    
+                    //posY.splice(0, 1);
+                    //posY.push (0)
+                    
+                    posY [posY.length - 1] = 0;
+                }
+                
+                if (posX [posX.length - 1] < 0) {
+                    
+                    //ctx.clearRect(posX[posX.length - 1], posY[posY.length - 1], 10, 10)
+                    
+                    posX.splice(0, 1);
+                    posX.push (c.width - 10)
+                    
+                }
+                
+                if (posY [posY.length - 1] < 0) {
+                    
+                    //ctx.clearRect(posX[posX.length - 1], posY[posY.length - 1], 10, 10)
+                    
+                    posY.splice(0, 1);
+                    posY.push (c.height - 10)
+                    
+                }
+                
+                
+                
+                for (i = 0; i < snake.length; i++) {
+                
+                    head = ctx.rect (posX [posX.length - i - 1], posY [posY.length - i - 1], 10, 10);
+                    
+                }
+                     
+                ctx.fillStyle = "green";
+                ctx.fill();
+                
+                collisionDetection ()
+                
+                if (pointX == posX [posX.length - 1] && pointY == posY [posY.length - 1]) {
+                     
+                    pointX = Math.round (Math.random () * 20) * 10
+                    
+                    pointY = Math.round (Math.random () * 20) * 10
+                    
+                    pointSpawn ()
+                        
+                    points ++ 
+                    
+                    if (pointX > c.width - 10 || pointY > c.height - 10) {
+                    
+                        pointX = Math.round (Math.random () * 20) * 10
+                    
+                        pointY = Math.round (Math.random () * 20) * 10
+                    
+                        pointSpawn ()
+                        
+                        alert ('hi')
+                        
+                    }
+                    //posX.push (posX [posX.length - 1] + directionX)
+                    //posY.push (posY [posY.length - 1] + directionY)
+                    
+                    addBody()
+                  
+                }
+                    
+                else {
+                    
+                    posX.splice(0, 1);
+                    posY.splice(0, 1);
+                    
+                }
+                
+                //document.getElementById('posX').innerHTML = posX;
+                //document.getElementById('posY').innerHTML = posY;
+                //document.getElementById('snake').innerHTML = snake;
+                document.getElementById('points').innerHTML = points
+                //document.getElementById('velO').innerHTML = velO
+                document.getElementById('highScore').innerHTML = highScore
+                
+            }
+            
+            function pointSpawn () {
+                
+                ctx.beginPath(point);
+                
+                point = ctx.rect (pointX, pointY, 10, 10);
+                
+                ctx.fillStyle = "red";
+                ctx.fill();
+                
+            }
+            
+            
+            
+            
+                
+                    
+                    
+            
+            
+    
+            
+            function collisionDetection() {
+                
+                    for (i = 0; i < snake.length; i++) {
+                        
+                        if (snake.length > 3) {
+                        
+                            if  (posX [posX.length - 1] == posX [i] && posY [posY.length - 1] == posY [i]) {
+                     
+                                alert('Game Over')
+                                
+                                if (points > highScore) {
+                                    
+                                    highScore = points
+                                    
+                                    
+                                }
+                     
+                                reset()
+                            
+                            }
+                        
+                        }
+                        
+                        if (pointX == posX [i] && pointY == posY [i]) {
+                            
+                            pointX = Math.round (Math.random () * 20) * 10
+                    
+                            pointY = Math.round (Math.random () * 20) * 10
+                    
+                            pointSpawn ()
+                            
+                        }
+                
+                    }
+                
+                
+                    
+
+                
+            }
+            
+            /*function pointGrab () {
+                
+                //lert (posX [posX.length - 1])
+                
+                if (pointX == posX [posX.length - 1] && posY [posY.length - 1] == pointY) {
+                    
+                    //alert('hi')
+                    
+                    pointX = Math.round (Math.random () * 50) * 10
+                    
+                    pointY = Math.round (Math.random () * 50) * 10
+                    
+                    pointSpawn()
+                        
+                    points ++ 
+                    
+                    addBody()
+                        
+                }
+                
+                
+                
+            }*/
+            
+            function addBody () {
+                
+                snakeSpawn()
+                
+                var nextOne = "body-" + snake.length
+                    
+                snake.push (nextOne)
+                
+                //  alert (snake.length)
+                
+                
+                
+                
+                //alert(x)
+                
+                /*if (velO > 30) {
+                    
+                    velO -= 5
+                    
+                }*/
+                
+                clearInterval(interval);
+                
+                interval = setInterval(snakeSpawn, velO)
+                
+            }
+            
+            function reset () {
+                
+                snake = ["head", "body-1", "body-2"]
+                
+                pointX = Math.round(Math.random() * 20) * 10
+                pointY = Math.round(Math.random() * 20) * 10
+                
+                points = 0
+                
+                
+
+                posX = [0, 10, 20, 30, 40]
+                posY = [0, 0, 0, 0, 0]
+                
+                directionX = 10
+                directionY = 0
+                
+                velO = 100
+                
+                velO -= 1
+                
+                clearInterval(interval);
+                
+                interval = setInterval(snakeSpawn, velO)
+                
+            }
+            
+            
+                
+            
+            
+        </script>
+        
+    </body>
+
+</html>
